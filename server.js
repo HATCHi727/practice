@@ -4,10 +4,18 @@ import { TemplateService } from "./services/templateService.js";
 import { DocumentGenerator } from "./services/documentGenerator.js";
 
 const app = express();
+app.use(express.json());   // добавлено
 
 const projectService = new ProjectService();
 const templateService = new TemplateService();
 const generator = new DocumentGenerator();
+
+// Новый маршрут
+app.post("/api/projects", (req, res) => {
+    const projectData = req.body;
+    const newProject = projectService.createProject(projectData);
+    res.status(201).json(newProject);
+});
 
 app.get("/api/projects/:id/export", (req, res) => {
     const id = parseInt(req.params.id);
